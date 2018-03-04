@@ -1,0 +1,13 @@
+.*
+!/.gitignore
+!/.scalafmt.conf
+!/.travis.yml
+.tags*
+.idea*
+*.log
+.DS_Store
+target/
+/.lib/
+project/target/
+.classpath
+out/

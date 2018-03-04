@@ -1,0 +1,32 @@
+language: scala
+
+sudo: false
+
+scala:
+  - 2.12.4
+
+jdk:
+  - oraclejdk8
+
+before_install:
+  - export MILL_VERSION=0.1.1
+  - bash install_mill.sh
+  - export PATH=$HOME/.bin:$PATH
+
+cache:
+  directories:
+  - $HOME/.sbt/0.13/dependency
+  - $HOME/.sbt/boot/scala*
+  - $HOME/.sbt/launchers
+  - $HOME/.ivy2/cache
+  - $HOME/.coursier
+  - $HOME/.bin
+
+script:
+  - mill core[$TRAVIS_SCALA_VERSION].test
+
+before_cache:
+  # Cleanup the cached directories to avoid unnecessary cache updates
+  # See https://www.scala-sbt.org/1.x/docs/Travis-CI-with-sbt.html#Caching
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
