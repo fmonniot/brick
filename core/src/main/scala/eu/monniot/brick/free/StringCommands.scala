@@ -1,8 +1,8 @@
-package eu.monniot.fs2.redis.free
+package eu.monniot.brick.free
 
 import cats.data.NonEmptyList
 import cats.free.Free.liftF
-import eu.monniot.fs2.redis.free.commands._
+import eu.monniot.brick.free.commands._
 
 import scala.concurrent.duration.FiniteDuration
 

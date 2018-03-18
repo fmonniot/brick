@@ -1,10 +1,10 @@
-package eu.monniot.fs2.redis.free
+package eu.monniot.brick.free
 
 import cats.data.Kleisli
 import cats.effect.Async
 import cats.implicits._
 import cats.{Monad, ~>}
-import eu.monniot.fs2.redis.free.commands._
+import eu.monniot.brick.free.commands._
 
 import scala.language.{higherKinds, reflectiveCalls}
 

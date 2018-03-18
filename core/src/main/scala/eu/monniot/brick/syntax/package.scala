@@ -1,8 +1,8 @@
-package eu.monniot.fs2.redis
+package eu.monniot.brick
 
 import cats.effect.IO
-import eu.monniot.fs2.redis.free.commands.CommandIO
-import eu.monniot.fs2.redis.free.interpreters.Transactor
+import eu.monniot.brick.free.commands.CommandIO
+import eu.monniot.brick.free.interpreters.Transactor
 
 
 // TODO Follow Cats packaging and put everything into an all package

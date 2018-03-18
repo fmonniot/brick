@@ -1,4 +1,4 @@
-package eu.monniot.fs2.redis
+package eu.monniot.brick
 
 import cats.free.Free
 

@@ -1,4 +1,4 @@
-package eu.monniot.fs2.redis.free
+package eu.monniot.brick.free
 
 // Alias to make it easily discoverable
 trait AllCommands

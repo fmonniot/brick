@@ -1,4 +1,4 @@
-package eu.monniot.fs2.redis.lettuce
+package eu.monniot.brick.lettuce
 
 import java.util.concurrent.CompletionStage
 import java.util.function.BiConsumer
@@ -6,8 +6,8 @@ import java.util.function.BiConsumer
 import cats.data.Kleisli
 import cats.effect.Async
 import cats.~>
-import eu.monniot.fs2.redis.free.interpreters.KleisliInterpreter
-import eu.monniot.fs2.redis.free.commands._
+import eu.monniot.brick.free.interpreters.KleisliInterpreter
+import eu.monniot.brick.free.commands._
 import io.lettuce.core.SetArgs
 import io.lettuce.core.api.async.RedisAsyncCommands
 

@@ -1,7 +1,8 @@
-package eu.monniot.fs2.redis.lettuce
+package eu.monniot.brick.lettuce
 
 import cats.effect.{Async, Sync}
-import eu.monniot.fs2.redis.free.interpreters.Transactor
+import eu.monniot.brick.free.interpreters.Transactor
+import eu.monniot.brick.free.interpreters.Transactor
 import io.lettuce.core.RedisClient
 
 object LettuceTransactor {
