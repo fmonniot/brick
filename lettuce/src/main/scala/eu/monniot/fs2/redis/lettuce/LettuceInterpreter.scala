@@ -9,11 +9,8 @@ import cats.~>
 import eu.monniot.fs2.redis.free.interpreters.KleisliInterpreter
 import eu.monniot.fs2.redis.free.keys.KeyOp
 import eu.monniot.fs2.redis.free.strings.StringOp
+import io.lettuce.core.SetArgs
 import io.lettuce.core.api.async.RedisAsyncCommands
-import io.lettuce.core.{KeyValue, RedisFuture, SetArgs}
-import io.lettuce.core.api.reactive.RedisReactiveCommands
-import org.reactivestreams.{Subscriber, Subscription}
-import reactor.core.publisher.Mono
 
 import scala.collection.JavaConverters._
 import scala.language.{higherKinds, implicitConversions}
@@ -27,7 +24,7 @@ trait LettuceInterpreter[M[_]] extends KleisliInterpreter[M, RedisAsyncCommands[
   lazy val keysInterpreter: KeyOp ~> Kleisli[M, Connection, ?] = new KeysInterpreter {}
   lazy val stringsInterpreter: StringOp ~> Kleisli[M, Connection, ?] = new StringsInterpreter {}
 
-  implicit def completionStageToAsync[T](stage: CompletionStage[T]): M[T] =
+  private implicit def completionStageToAsync[T](stage: CompletionStage[T]): M[T] =
     M.async { cb =>
       stage.whenComplete(new BiConsumer[T, Throwable] {
         override def accept(t: T, u: Throwable) = {
@@ -115,7 +112,7 @@ trait LettuceInterpreter[M[_]] extends KleisliInterpreter[M, RedisAsyncCommands[
 
 
 object LettuceInterpreter {
-  def apply[M[_]](implicit ev: MonoToM[M]): LettuceInterpreter[M] =
+  def apply[M[_]](implicit ev: Async[M]): LettuceInterpreter[M] =
     new LettuceInterpreter[M] {
       val M = ev
     }
