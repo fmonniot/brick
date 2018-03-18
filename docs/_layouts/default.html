@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: " en-US" }}">
+<head>
+    <meta charset="UTF-8">
+
+    {% seo %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body>
+<section class="page-header">
+
+    <div class="global-nav">
+        <div class="brand">
+            <a href="{{site.baseurl}}/">
+                <h1>{{ site.title | default: site.github.repository_name }}</h1>
+            </a>
+        </div>
+
+        <nav class="nav">
+            <ul>
+                <li>
+                    <a href="{{ site.baseurl }}/guide/01-introduction">
+                        <i class="fa fa-book"></i>
+                        <span class="label">Guide</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ site.github.repository_url }}">
+                        <i class="fa fa-github"></i>
+                        <span class="label">GitHub</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="https://www.javadoc.io/doc/eu.monniot.brick/brick-core_2.12">
+                        <i class="fa fa-file-text"></i>
+                        <span class="label">Scaladoc</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <h1 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h1>
+</section>
+
+{% if page.doc %}
+<section class="page-nav">
+    <ul>
+        {% for page in site.pages %}
+        {% if page.doc == true %}
+        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endif %}   <!-- resource-p -->
+        {% endfor %}  <!-- page -->
+    </ul>
+</section>
+{% endif %}
+
+<section class="main-content">
+    {{ content }}
+</section>
+
+{% unless page.doc %}
+<footer class="page-footer">
+    <strong>brick</strong> is designed and developed by
+    <a href="https://github.com/{{ site.github_username }}">{{ site.github_username }}</a> .
+</footer>
+{% endunless %}
+
+{% if site.google_analytics %}
+<script type="text/javascript">
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', '{{ site.google_analytics }}', 'auto');
+    ga('send', 'pageview');
+</script>
+{% endif %}
+</body>
+</html>

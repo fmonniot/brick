@@ -1,0 +1,135 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.global-nav {
+
+  a {
+    color: #fff;
+  }
+
+  .brand {
+    width: 20%;
+    float: left;
+    text-align: left;
+
+    h1 {
+      margin: 0;
+      display: inline-block;
+      font-size: 1.5em;
+    }
+  }
+
+  .nav {
+    width: 80%;
+    float: left;
+    text-align: right;
+    padding-top: 0.4rem;
+
+    a:hover, a:focus {
+      opacity: 0.5;
+      text-decoration: none;
+    }
+
+    ul {
+      padding: 0;
+      margin: 0;
+
+      li {
+        list-style: none;
+        display: inline-block;
+
+        margin-right: 50px;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  @include large {
+    max-width: 64rem;
+    padding: 2rem 6rem;
+    margin: 0 auto;
+  }
+
+  @include medium {
+    padding: 2rem 4rem;
+    //font-size: 1.1rem;
+
+    .nav ul li {
+      margin-right: 1.5rem;
+    }
+
+  }
+
+  @include small {
+    padding: 2rem 1rem;
+    //font-size: 1rem;
+
+    .label {
+      display: none !important;
+    }
+
+    .nav ul li {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.project-tagline {
+  clear: both;
+  margin-top: 4em;
+}
+
+.page-nav {
+  border: 1px solid #ccc;
+  border-width: 1px 0;
+  list-style: none;
+
+  text-align: center;
+
+  ul {
+    margin: 0;
+    padding: 8px 0;
+  }
+
+  li {
+    display: inline;
+
+    a {
+      padding: 10px;
+    }
+  }
+}
+
+.page-header {
+  padding-top: 0rem;
+}
+
+.page-footer {
+
+  padding-top: 2rem;
+  margin-top: 2rem;
+  border-top: solid 1px $hr-border-color;
+  opacity: 0.7;
+
+  @include large {
+    max-width: 64rem;
+    padding: 2rem 6rem 1rem 6rem;
+    margin: 0 auto;
+    font-size: 0.8rem;
+  }
+
+  @include medium {
+    padding: 2rem 4rem 1rem 4rem;
+    font-size: 0.8rem;
+  }
+
+  @include small {
+    padding: 2rem 1rem 1rem 1rem;
+    font-size: 0.7rem;
+  }
+}

@@ -1,3 +1,5 @@
+---
+---
 # Brick
 Build Badge
 Maven Central Version Badge
@@ -48,13 +50,15 @@ To use **brick** you need to add the following to your `build.sbt`:
 
 scalacOptions += "-Ypartial-unification" // 2.11.9+
 
+val brickVersion = "0.1.0"
+
 libraryDependencies ++= Seq(
     // Always add this one
-    "eu.monniot.brick" %% "brick-core" % "0.1.0",
+    "eu.monniot.brick" %% "brick-core" % brickVersion,
 
     // And those as needed
-    "eu.monniot.brick" %% "brick-lettuce" % "0.1.0", // Lettuce driver
-    "eu.monniot.brick" %% "brick-test-kit" % "0.1.0" // The Brick test-kit
+    "eu.monniot.brick" %% "brick-lettuce" % brickVersion, // Lettuce driver
+    "eu.monniot.brick" %% "brick-test-kit" % brickVersion // The Brick test-kit
 )
 ```
 

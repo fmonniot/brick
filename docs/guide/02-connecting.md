@@ -1,4 +1,8 @@
-# 02 Connecting to a Database
+---
+doc: true
+title: Connecting to Redis
+---
+# Chapter 2: Connecting to Redis
 
 In this chapter we start from the beginning. First we write a program that connects to a Redis database and returns a value, and then we run that program in the REPL. We also touch a composing small programs to construct larger ones.
 

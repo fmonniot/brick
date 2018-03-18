@@ -1,4 +1,8 @@
-# 01 Introduction
+---
+doc: true
+title: Introduction
+---
+# Chapter 1: Introduction
 
 This is a very short documentation about **brick**, a pure-functional Redis layer for Scala.
 

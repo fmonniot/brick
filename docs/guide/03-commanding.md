@@ -1,4 +1,8 @@
-# 03 Commanding
+---
+doc: true
+title: Commanding
+---
+# Chapter 3: Commanding
 
 In this chapter we will write some programs to issue commands to _Redis_.
 
