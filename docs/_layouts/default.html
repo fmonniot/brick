@@ -54,7 +54,7 @@
     <ul>
         {% for page in site.pages %}
         {% if page.doc == true %}
-        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        <li><a href="{{ site.baseurl}}{{ page.url }}">{{ page.title }}</a></li>
         {% endif %}   <!-- resource-p -->
         {% endfor %}  <!-- page -->
     </ul>
