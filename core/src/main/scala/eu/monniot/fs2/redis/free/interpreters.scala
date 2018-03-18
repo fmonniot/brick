@@ -5,8 +5,6 @@ import cats.effect.Async
 import cats.implicits._
 import cats.{Monad, ~>}
 import eu.monniot.fs2.redis.free.commands._
-import eu.monniot.fs2.redis.free.keys.KeyOp
-import eu.monniot.fs2.redis.free.strings.StringOp
 
 import scala.language.{higherKinds, reflectiveCalls}
 
@@ -81,11 +79,7 @@ object interpreters {
   trait KleisliInterpreter[M[_], Conn] {
     implicit val M: Async[M]
 
-    def keysInterpreter: KeyOp ~> Kleisli[M, Conn, ?]
-
-    def stringsInterpreter: StringOp ~> Kleisli[M, Conn, ?]
-
-    lazy val CommandInterpreter: CommandOp ~> Kleisli[M, Conn, ?] = keysInterpreter or stringsInterpreter
+    def CommandInterpreter: CommandOp ~> Kleisli[M, Conn, ?]
 
     def connection[A](op: CommandOp[A]): Kleisli[M, Conn, A] =
       Kleisli(conn => CommandInterpreter(op).run(conn))

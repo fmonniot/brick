@@ -7,8 +7,7 @@ import cats.data.Kleisli
 import cats.effect.Async
 import cats.~>
 import eu.monniot.fs2.redis.free.interpreters.KleisliInterpreter
-import eu.monniot.fs2.redis.free.keys.KeyOp
-import eu.monniot.fs2.redis.free.strings.StringOp
+import eu.monniot.fs2.redis.free.commands._
 import io.lettuce.core.SetArgs
 import io.lettuce.core.api.async.RedisAsyncCommands
 
@@ -21,14 +20,13 @@ trait LettuceInterpreter[M[_]] extends KleisliInterpreter[M, RedisAsyncCommands[
 
   type Connection = RedisAsyncCommands[String, String]
 
-  lazy val keysInterpreter: KeyOp ~> Kleisli[M, Connection, ?] = new KeysInterpreter {}
-  lazy val stringsInterpreter: StringOp ~> Kleisli[M, Connection, ?] = new StringsInterpreter {}
+  lazy val CommandInterpreter: CommandOp ~> Kleisli[M, Connection, ?] = new Interpreter {}
 
   private implicit def completionStageToAsync[T](stage: CompletionStage[T]): M[T] =
     M.async { cb =>
       stage.whenComplete(new BiConsumer[T, Throwable] {
         override def accept(t: T, u: Throwable) = {
-          if(u != null) cb(Left(u))
+          if (u != null) cb(Left(u))
           else cb(Right(t))
         }
       })
@@ -36,21 +34,15 @@ trait LettuceInterpreter[M[_]] extends KleisliInterpreter[M, RedisAsyncCommands[
 
   private def kleisli[A](f: Connection => M[A]) = Kleisli((conn: Connection) => f(conn))
 
-  trait KeysInterpreter extends (KeyOp ~> Kleisli[M, Connection, ?]) {
 
-    import eu.monniot.fs2.redis.free.keys._
+  trait Interpreter extends (CommandOp ~> Kleisli[M, Connection, ?]) {
 
-    def apply[A](fa: KeyOp[A]) = fa match {
+    def apply[A](fa: CommandOp[A]) = fa match {
+      // KEYS
       case Del(keys) => kleisli(_.del(keys.toList: _*)).map(_.toLong)
       case Exists(keys) => kleisli(_.exists(keys.toList: _*)).map(_.toLong)
-    }
-  }
 
-  trait StringsInterpreter extends (StringOp ~> Kleisli[M, Connection, ?]) {
-
-    import eu.monniot.fs2.redis.free.strings._
-
-    def apply[A](fa: StringOp[A]) = fa match {
+      // STRINGS
       case Append(key, value) => kleisli(_.append(key, value)).map(_.toLong)
       case BitCount(key, None) => kleisli(_.bitcount(key)).map(_.toLong)
       case BitCount(key, Some((start, end))) =>

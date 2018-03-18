@@ -15,11 +15,14 @@ package object redis {
 
   // TODO Move that part as a test
   // Testing out the compilation
+  val program: CommandIO[Option[String]] = {
+    import redis.free.commands.all._
 
-  val program: CommandIO[Option[String]] = for {
-    r <- strings.get("key")
-    _ <- keys.del("key")
-  } yield r
+    for {
+      r <- get("key")
+      _ <- del("key")
+    } yield r
+  }
 
   // TODO What does that do ?
   val t = 42.pure[CommandIO]
