@@ -6,7 +6,7 @@ import cats.free.Free
 package object free {
 
 
-  object commands extends Commands {
+  object commands extends CommandsAlg {
 
     // Free Monad over CommandOp
     type CommandIO[A] = Free[CommandOp, A]

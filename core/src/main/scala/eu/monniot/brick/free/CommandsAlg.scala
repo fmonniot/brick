@@ -5,7 +5,7 @@ import cats.data.NonEmptyList
 import scala.concurrent.duration.FiniteDuration
 
 // Algebra of operation for redis commands (except streams)
-trait Commands {
+trait CommandsAlg {
 
   sealed trait CommandOp[A]
 
