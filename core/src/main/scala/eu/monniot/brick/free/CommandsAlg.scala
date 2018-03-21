@@ -74,6 +74,7 @@ trait CommandsAlg {
 
   case class BitPos(key: String, bit: Boolean, start: Option[Long], end: Option[Long]) extends CommandOp[Long]
 
+  // This may be removed and generalized by DecrBy(key, 1)
   case class Decr(key: String) extends CommandOp[Long]
 
   case class DecrBy(key: String, amount: Long) extends CommandOp[Long]
@@ -86,6 +87,7 @@ trait CommandsAlg {
 
   case class GetSet(key: String, value: String) extends CommandOp[String]
 
+  // This may be removed and generalized by IncrBy(key, 1)
   case class Incr(key: String) extends CommandOp[Long]
 
   case class IncrBy(key: String, amount: Long) extends CommandOp[Long]

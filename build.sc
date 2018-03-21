@@ -17,7 +17,10 @@ class CoreModule(val crossScalaVersion: String) extends CommonModule {
   override def ivyDeps = Agg(
     ivy"org.typelevel::cats-core:1.0.1",
     ivy"org.typelevel::cats-effect:0.8",
-    ivy"org.typelevel::cats-free:1.0.1"
+    ivy"org.typelevel::cats-free:1.0.1",
+
+    // For the test-kit
+    ivy"com.typesafe.akka::akka-actor-typed:2.5.9"
   )
 
 }
