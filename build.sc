@@ -4,6 +4,7 @@ import mill.scalalib._
 import mill.scalalib.publish.{PomSettings, License, Developer, SCM}
 import ammonite.ops._
 
+import $ivy.`org.scalameta:scalameta_2.12:3.5.0`
 import $file.bintrayPublish
 
 // TODO Add back cross compilation to scala 2.11
@@ -22,6 +23,67 @@ class CoreModule(val crossScalaVersion: String) extends CommonModule {
     // For the test-kit
     ivy"com.typesafe.akka::akka-actor-typed:2.5.9"
   )
+
+  def generateTestKitAlgebra() = T.command {
+    import scala.meta._
+
+    val source: Source = (millSourcePath / 'src / 'main / 'scala / 'eu / 'monniot / 'brick / 'free / "CommandsAlg.scala")
+      .toIO.parse[Source]
+      .getOrElse(throw new IllegalStateException("Cannot parse the CommandsAlg file"))
+
+    // It assumes the template contains only a single extends,
+    // and that extended type have only one parameterized type
+    def extractReturnType(template: Template): Option[Type] = {
+      template.inits.map(_.tpe).collectFirst {
+        case Type.Apply(_, List(returnTpe)) => returnTpe
+      }
+    }
+
+
+    val generated = source.stats.collectFirst {
+      case q"package $_ { ..$stats }" =>
+
+        val imp = q"import akka.actor.typed._"
+        val actorCommandTrait = Type.Name("Command")
+        val actorCommandTraitTerm = Term.Name("Command")
+
+        val body = imp +: stats.map {
+          case q"..$mods trait $_[..$_] extends $template" =>
+
+
+            val newTemplateContent: List[Stat] = template.stats.flatMap {
+              case q"..$mods class $tname[..$_] ..$_ (...$paramss) extends $template" =>
+
+                for {
+                  returnType <- extractReturnType(template)
+
+                  replyToType: Type = Type.Apply(Type.Name("ActorRef"), List(returnType))
+                  replyToTerm: Term.Param = param"replyTo: $replyToType"
+                  responseParams: List[Term.Param] = paramss.flatten :+ replyToTerm
+
+                  inits: List[Init] = List(Init(actorCommandTrait, actorCommandTraitTerm, List.empty))
+
+                } yield q"..$mods class $tname (..$responseParams) extends ${template.copy(inits = inits)}"
+
+              // We are replacing the original sealed trait by this one
+              case q"sealed trait $tname[..$_]" if tname.syntax == "CommandOp" =>
+                Option(q"sealed trait $actorCommandTrait")
+
+              case other => Option(other)
+            }
+
+            q"..$mods trait RedisActorAlg extends ${template.copy(stats = newTemplateContent)}"
+          case other =>
+            other
+        }
+
+        q"package eu.monniot.brick.testkit {..$body}"
+    }
+
+    val target = millSourcePath / 'src / 'main / 'scala / 'eu / 'monniot / 'brick / 'testkit / "RedisActorAlg.scala"
+
+    write.over.apply(target, generated.get.toString())
+  }
 
 }
 
