@@ -18,6 +18,7 @@ object interpreters {
 
   // find another name, as it does a bit more than just transaction
   // TODO Update the scaladoc to reflect the reality :)
+  // TODO This may be renamed `Driver` as its really the execution point for all brick program
   sealed abstract class Transactor[M[_]] {
     self =>
 
