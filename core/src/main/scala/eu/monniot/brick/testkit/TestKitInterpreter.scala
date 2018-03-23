@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.language.{higherKinds, implicitConversions}
 
 
-trait TestKitInterpreter[M[_]] extends KleisliInterpreter[M, ActorRef[RedisActor.Command]] {
+trait TestKitInterpreter[M[_]] extends KleisliInterpreter[M, ActorRef[RedisActorAlg.Command]] {
 
   implicit val M: Async[M]
   implicit val ec: ExecutionContext
@@ -23,7 +23,7 @@ trait TestKitInterpreter[M[_]] extends KleisliInterpreter[M, ActorRef[RedisActor
 
   private implicit val timeout: Timeout = Timeout(FiniteDuration(1, "min"))
 
-  type Connection = ActorRef[RedisActor.Command]
+  type Connection = ActorRef[RedisActorAlg.Command]
 
   lazy val CommandInterpreter: CommandOp ~> Kleisli[M, Connection, ?] = new Interpreter {}
 
@@ -56,13 +56,7 @@ trait TestKitInterpreter[M[_]] extends KleisliInterpreter[M, ActorRef[RedisActor
 
         case BitCount(key, Some((start, end))) => ???
 
-        case BitOp(BitOpOperator.And(keys), dest) => ???
-
-        case BitOp(BitOpOperator.Not(src), dest) => ???
-
-        case BitOp(BitOpOperator.Or(keys), dest) => ???
-
-        case BitOp(BitOpOperator.Xor(keys), dest) => ???
+        case BitOp(op, dest) => kleisli(c => c ? (RedisActorAlg.BitOp(op, dest, _)))
 
         case BitPos(key, bit, Some(start), Some(end)) => ???
 
@@ -74,7 +68,7 @@ trait TestKitInterpreter[M[_]] extends KleisliInterpreter[M, ActorRef[RedisActor
 
         case DecrBy(key, amount) => ???
 
-        case Get(key) => kleisli(c => c ? (RedisActor.Get(key, _)))
+        case Get(key) => kleisli(c => c ? (RedisActorAlg.Get(key, _)))
 
         case GetBit(key, offset) => ???
 

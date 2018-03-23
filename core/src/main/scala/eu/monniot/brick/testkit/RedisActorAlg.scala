@@ -3,8 +3,9 @@ package eu.monniot.brick.testkit
 import akka.actor.typed._
 import cats.data.NonEmptyList
 import scala.concurrent.duration.FiniteDuration
+import eu.monniot.brick.free.commands.BitOpOperator
 
-trait RedisActorAlg {
+object RedisActorAlg {
 
   sealed trait Command
 
@@ -15,20 +16,6 @@ trait RedisActorAlg {
   case class Append(key: String, value: String, replyTo: ActorRef[Long]) extends Command
 
   case class BitCount(key: String, startEnd: Option[(Long, Long)], replyTo: ActorRef[Long]) extends Command
-
-  sealed trait BitOpOperator
-
-  object BitOpOperator {
-
-    case class And(keys: NonEmptyList[String]) extends BitOpOperator
-
-    case class Not(key: String) extends BitOpOperator
-
-    case class Or(keys: NonEmptyList[String]) extends BitOpOperator
-
-    case class Xor(keys: NonEmptyList[String]) extends BitOpOperator
-
-  }
 
   case class BitOp(op: BitOpOperator, dest: String, replyTo: ActorRef[Long]) extends Command
 
