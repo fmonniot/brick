@@ -1,12 +1,12 @@
 package eu.monniot.brick.testkit
 
 import akka.actor.typed._
-import akka.actor.typed.scaladsl.Actor
 import akka.actor.typed.receptionist.ServiceKey
+import akka.actor.typed.scaladsl.Actor
 import cats.data.NonEmptyList
 import eu.monniot.brick.free.commands.BitOpOperator
-import eu.monniot.brick.testkit.TypedMap._
 import eu.monniot.brick.testkit.RedisActorAlg._
+import eu.monniot.brick.testkit.TypedMap._
 
 
 object RedisActor {
@@ -22,13 +22,13 @@ object RedisActor {
   private def redis(db: TypedMap[String]): Behavior[Command] =
     Actor.immutable {
       case (_, Del(keys, replyTo)) =>
-        val count = countKeys(db, keys)
-        replyTo ! count
+        replyTo ! countKeys(db, keys)
+
         redis(keys.foldLeft(db) { case (redis, key) => redis.remove(key) })
 
       case (_, Exists(keys, replyTo)) =>
-        val count = countKeys(db, keys)
-        replyTo ! count
+        replyTo ! countKeys(db, keys)
+
         Actor.same
 
       case (_, Append(key, value, replyTo)) =>
@@ -129,10 +129,16 @@ object RedisActor {
         Actor.same
 
       case (_, Get(key, replyTo)) =>
-
-
         replyTo ! db.get[String](key)
+
         Actor.same
+
+      // TODO Real implementation
+      case (_, Set(key, value, ex, exists, replyTo)) =>
+        replyTo ! true
+        redis(db.replace[String](key) {
+           _ => value.typed
+        })
 
       // This can be commented to verify that all messages have been implemented
       // In fact, post development this case won't exists anymore :)

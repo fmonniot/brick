@@ -9,7 +9,7 @@ import $file.bintrayPublish
 
 // TODO Add back cross compilation to scala 2.11
 
-object core extends Cross[CoreModule]("2.12.4")
+object core extends Cross[CoreModule]("2.12.5")
 
 class CoreModule(val crossScalaVersion: String) extends CommonModule {
 
@@ -18,10 +18,7 @@ class CoreModule(val crossScalaVersion: String) extends CommonModule {
   override def ivyDeps = Agg(
     ivy"org.typelevel::cats-core:1.0.1",
     ivy"org.typelevel::cats-effect:0.8",
-    ivy"org.typelevel::cats-free:1.0.1",
-
-    // For the test-kit
-    ivy"com.typesafe.akka::akka-actor-typed:2.5.9"
+    ivy"org.typelevel::cats-free:1.0.1"
   )
 
   def generateTestKitAlgebra() = T.command {
@@ -80,14 +77,14 @@ class CoreModule(val crossScalaVersion: String) extends CommonModule {
         q"package eu.monniot.brick.testkit {..$body}"
     }
 
-    val target = millSourcePath / 'src / 'main / 'scala / 'eu / 'monniot / 'brick / 'testkit / "RedisActorAlg.scala"
+    val target = pwd / 'testkit / 'src / 'main / 'scala / 'eu / 'monniot / 'brick / 'testkit / "RedisActorAlg.scala"
 
     write.over.apply(target, generated.get.toString())
   }
 
 }
 
-object lettuce extends Cross[LettuceModule]("2.12.4") {
+object lettuce extends Cross[LettuceModule]("2.12.5") {
 
 
 }
@@ -98,6 +95,20 @@ class LettuceModule(val crossScalaVersion: String) extends CommonModule {
 
   override def ivyDeps = super.ivyDeps() ++ Agg(
     ivy"io.lettuce:lettuce-core:5.0.2.RELEASE"
+  )
+}
+
+object testkit extends Cross[TestKitModule]("2.12.5") {
+
+
+}
+
+class TestKitModule(val crossScalaVersion: String) extends CommonModule {
+
+  override def moduleDeps = Seq(core())
+
+  override def ivyDeps = super.ivyDeps() ++ Agg(
+    ivy"com.typesafe.akka::akka-actor-typed:2.5.9"
   )
 }
 

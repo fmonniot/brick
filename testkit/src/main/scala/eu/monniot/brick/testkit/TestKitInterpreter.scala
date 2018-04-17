@@ -1,8 +1,8 @@
 package eu.monniot.brick.testkit
 
-import akka.actor.{ActorSystem, Scheduler}
 import akka.actor.typed.ActorRef
 import akka.actor.typed.scaladsl.AskPattern._
+import akka.actor.{ActorSystem, Scheduler}
 import akka.util.Timeout
 import cats.data.Kleisli
 import cats.effect.Async
@@ -88,7 +88,7 @@ trait TestKitInterpreter[M[_]] extends KleisliInterpreter[M, ActorRef[RedisActor
 
         case MSetNx(kv) => ???
 
-        case Set(key, value, expire, exists) => ???
+        case Set(key, value, expire, exists) => kleisli(c => c ? (RedisActorAlg.Set(key, value, expire, exists, _)))
 
         case SetBit(key, offset, value) => ???
 

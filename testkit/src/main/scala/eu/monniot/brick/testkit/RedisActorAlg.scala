@@ -2,8 +2,9 @@ package eu.monniot.brick.testkit
 
 import akka.actor.typed._
 import cats.data.NonEmptyList
-import scala.concurrent.duration.FiniteDuration
 import eu.monniot.brick.free.commands.BitOpOperator
+
+import scala.concurrent.duration.FiniteDuration
 
 object RedisActorAlg {
 
